@@ -2,3 +2,4 @@ DataScience/
 .idea/
 env/
 .ipynb_checkpoints/
+Kaggle/Titanic/datasets/*.csv
