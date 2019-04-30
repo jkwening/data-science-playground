@@ -1,7 +1,7 @@
 import unittest
 import math
 from collections import defaultdict
-import main
+from search_engine import SearchEngine
 
 
 class MyTestCase(unittest.TestCase):
@@ -11,7 +11,7 @@ class MyTestCase(unittest.TestCase):
 
     def test_get_tokens(self):
         expected = 34
-        tokens = main.get_tokens(main.snippets[0])
+        tokens = main._get_tokens(main.snippets[0])
         self.assertEqual(expected, len(tokens),
                          msg=f'Expected {expected}\t Got {len(tokens)} tokens')
 
@@ -32,7 +32,7 @@ class MyTestCase(unittest.TestCase):
         }
         snippets = main.snippets[0:2]
         for i, snippet in enumerate(snippets):
-            main.index(i, snippet, stop_words=False)
+            main._index(i, snippet, stop_words=False)
 
         print(main.occurrence, '\n')
         for k1, v1 in expected.items():
@@ -47,7 +47,7 @@ class MyTestCase(unittest.TestCase):
         # That is, articles[300] has token einstein 1 times, articles[84] has
         # token einstein 5 times, and articles[294] has token einstein 1 times.
         expected = {300: 1, 84: 5, 294: 1}
-        main.verify()
+        main.generate_word_freq()
         result = main.occurrence['einstein']
 
         for id in expected:
