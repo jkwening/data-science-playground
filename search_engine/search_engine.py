@@ -9,7 +9,6 @@ from collections import defaultdict
 
 # Add project into python path
 ROOT_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__)))
-sys.path.append(ROOT_PATH)
 DATA_PATH = os.path.join(ROOT_PATH, 'data')
 WIKI_600_PATH = os.path.join(DATA_PATH, 'wiki-600.txt')
 WIKI_26000_PATH = os.path.join(DATA_PATH, 'wiki-26000.txt')
@@ -80,9 +79,10 @@ class SearchEngine(object):
 
     def _generate_word_freq(self):
         self._word_freq = defaultdict(dict)
+        increment = 50 if self._wiki_size == 600 else 1000
         print('Generating updated word frequency index. Processed...', end=' ')
         for i, article in enumerate(self._articles):
-            if i and i % 10 == 0:
+            if i and i % increment == 0:
                 print(i, end=', ')
             sys.stdout.flush()
             self._index(i, article)
