@@ -159,8 +159,41 @@ def filter_pairs(pairs: list) -> list:
     return [pair for pair in pairs if filter_pair(pair)]
 
 
+def trim_rare_words(voc, pairs, min_count) -> list:
+    """Trim words under min_count threshold using 'voc.trim'."""
+    voc.trim(min_count)
+
+    # Filter out pairs with trimmed words
+    keep_pairs = list()
+    for pair in pairs:
+        input_sentence = pair[0]
+        output_sentence = pair[1]
+        keep_input = True
+        keep_output = True
+
+        # Check input and output sentences
+        word2index = voc.get_word2index()
+        for word in input_sentence.split():
+            if word not in word2index:
+                keep_input = False
+                break
+        for word in output_sentence.split():
+            if word not in word2index:
+                keep_output = False
+                break
+
+        # Update keep_pairs tracker
+        if keep_input and keep_output:
+            keep_pairs.append(pair)
+
+    print('\tTrimmed from {} pairs to {}, {:.4f} of total'.format(
+        len(pairs), len(keep_pairs), len(keep_pairs) / len(pairs)
+    ))
+    return keep_pairs
+
+
 def assemble_voc_pairs(corpus_name: str, formatted_data_file_path: str,
-                       save=True) -> tuple:
+                       voc_trim: (bool, int), save=True) -> tuple:
     """
     Process formatted movie lines data file and save voc obj
     and pairs by default.
@@ -168,6 +201,9 @@ def assemble_voc_pairs(corpus_name: str, formatted_data_file_path: str,
     Args:
         corpus_name: Name of the corpus.
         formatted_data_file_path: The path for the formatted movie lines txt.
+        voc_trim (bool, min_count): Trim works used under the min_count from
+          the voc. Example: (True, 3) trims words with word counts less than 3
+          from voc.
         save: If True save voc object and pairs list as pickle file.
 
     Returns:
@@ -177,12 +213,17 @@ def assemble_voc_pairs(corpus_name: str, formatted_data_file_path: str,
     voc, pairs = read_vocs(formatted_data_file_path, corpus_name)
     print('\tRead {!s} sentence pairs'.format(len(pairs)))
     pairs = filter_pairs(pairs)
-    print('\tTrimmed to {!s} sentence pairs'.format(len(pairs)))
-    print('\nCounting words...')
+    print('\tFiltered to {!s} sentence pairs'.format(len(pairs)))
+
+    print('\nCounting vocab words...')
     for pair in pairs:
         voc.add_sentence(pair[0])
         voc.add_sentence(pair[1])
-    print('\tCounted words:', voc.get_num_words())
+    print('\tCounted vocab words:', voc.get_num_words())
+
+    # Trim rare words
+    if voc_trim[0]:
+        pairs = trim_rare_words(voc, pairs, min_count=voc_trim[1])
 
     # Print some pairs to validate
     print('\nPairs:')
@@ -201,6 +242,6 @@ def assemble_voc_pairs(corpus_name: str, formatted_data_file_path: str,
     return voc, pairs
 
 
-voc, pairs = assemble_voc_pairs(corpus_name='Cornell Movie Dialogues',
-                                formatted_data_file_path=FORMATTED_MOVIE_LINES_PATH,
-                                save=True)
+temp_voc, temp_pairs = assemble_voc_pairs(corpus_name='Cornell Movie Dialogues',
+                                          formatted_data_file_path=FORMATTED_MOVIE_LINES_PATH,
+                                          voc_trim=(True, 3), save=True)

@@ -24,6 +24,9 @@ class Voc(object):
     def get_num_words(self) -> int:
         return self._num_words
 
+    def get_word2index(self):
+        return self._word2index
+
     def add_word(self, word):
         """Add a word to the vocabulary."""
         if word not in self._word2index:
@@ -54,7 +57,7 @@ class Voc(object):
             if v >= min_count:
                 keep_words.append(k)
 
-        print('keep words {} / {} = {:.4f}'.format(
+        print('\nKeep words {} / {} = {:.4f}'.format(
             len(keep_words), len(self._word2index),
             len(keep_words) / len(self._word2index)
         ))
