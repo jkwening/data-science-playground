@@ -13,6 +13,7 @@ TIMESTAMP = datetime.now().strftime('%m%d%Y')
 ROOT_DIR = os.path.abspath(os.path.dirname(__file__))
 SAVE_DIR = os.path.join(ROOT_DIR, 'data', 'save')
 CORPUS_DIR = os.path.join(ROOT_DIR, 'data', 'cornell_movie_dialogs_corpus')
+CORPUS_NAME = 'Cornell Movie Dialogues'
 MOVIE_LINES_PATH = os.path.join(CORPUS_DIR, 'movie_lines.txt')
 MOVIE_CONVERSATIONS_PATH = os.path.join(CORPUS_DIR, 'movie_conversations.txt')
 FORMATTED_MOVIE_LINES_PATH = os.path.join(CORPUS_DIR, 'formatted_movie_lines.txt')
@@ -240,8 +241,3 @@ def assemble_voc_pairs(corpus_name: str, formatted_data_file_path: str,
             pickle.dump(pairs, f)
 
     return voc, pairs
-
-
-temp_voc, temp_pairs = assemble_voc_pairs(corpus_name='Cornell Movie Dialogues',
-                                          formatted_data_file_path=FORMATTED_MOVIE_LINES_PATH,
-                                          voc_trim=(True, 3), save=True)

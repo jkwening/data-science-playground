@@ -5,7 +5,7 @@ import torch
 from simple_chatbot.voc import EOS_TOKEN, PAD_TOKEN
 
 
-def index_from_sentence(voc, sentence):
+def indices_from_sentence(voc, sentence):
     word2index = voc.get_word2index()
     return [word2index[word] for word in sentence.split()] + [EOS_TOKEN]
 
@@ -25,7 +25,7 @@ def binary_matrix(l):
 
 def input_var(l, voc):
     """Returns padded input sentence tensor and lengths"""
-    indices_batch = [index_from_sentence(voc, sentence) for sentence in l]
+    indices_batch = [indices_from_sentence(voc, sentence) for sentence in l]
     lengths = torch.tensor(data=[len(idx) for idx in indices_batch])
     pad_list = add_zero_padding(indices_batch)
     pad_var = torch.LongTensor(data=pad_list)
@@ -34,7 +34,7 @@ def input_var(l, voc):
 
 def output_var(l, voc):
     """Returns padded target sequence tensor, padding mask, and max target length."""
-    indices_batch = [index_from_sentence(voc, sentence) for sentence in l]
+    indices_batch = [indices_from_sentence(voc, sentence) for sentence in l]
     max_target_len = max([len(indices) for indices in indices_batch])
     pad_list = add_zero_padding(indices_batch)
     mask = binary_matrix(pad_list)
@@ -56,23 +56,3 @@ def batch_to_train_data(voc, pair_batch):
     output, mask, max_target_len = output_var(output_batch, voc)
 
     return inp, lengths, output, mask, max_target_len
-
-
-# Example for validation
-small_batch_size = 5
-import pickle
-import random
-with open('data/save/voc_05122019', mode='rb') as f:
-    voc = pickle.load(f)
-with open('data/save/pairs_05122019', mode='rb') as f:
-    pairs = pickle.load(f)
-batches = batch_to_train_data(voc,
-                              [random.choice(pairs)
-                               for _ in range(small_batch_size)])
-input_variable, lengths, target_variable, mask, max_target_len = batches
-
-print('input_variable:', input_variable)
-print('lengths:', lengths)
-print('target_variable:', target_variable)
-print('mask:', mask)
-print('max_target_len:', max_target_len)
