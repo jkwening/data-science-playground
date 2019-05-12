@@ -6,6 +6,7 @@ ROOT_DIR = os.path.abspath(os.path.dirname(__file__))
 CORPUS_DIR = os.path.join(ROOT_DIR, 'data', 'cornell_movie_dialogs_corpus')
 MOVIE_LINES_PATH = os.path.join(CORPUS_DIR, 'movie_lines.txt')
 MOVIE_CONVERSATIONS_PATH = os.path.join(CORPUS_DIR, 'movie_conversations.txt')
+FORMATTED_MOVIE_LINES_PATH = os.path.join(CORPUS_DIR, 'formatted_movie_lines.txt')
 MOVIE_LINES_FIELDS = ['lineID', 'characterID', 'movieID', 'character', 'text']
 MOVIE_CONVOS_FIELDS = ['character1ID', 'character2ID', 'movieID', 'utteranceIDs']
 
@@ -92,7 +93,3 @@ def format_movie_lines(save_file_as='formatted_movie_lines.txt'):
     # Print a sample of lines
     print('\nSample lines from file:')
     print_lines(save_file_as)
-
-
-data_file = os.path.join(CORPUS_DIR, 'formatted_movie_lines.txt')
-format_movie_lines(data_file)
