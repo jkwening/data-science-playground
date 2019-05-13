@@ -11,7 +11,10 @@ DataScience/
 Packt/
 pytorch_challenge/
 Yelp/
+
+# Large data folders
 search_engine/data/
+simple_chatbot/data/
 
 # Others
 numpy-cheatsheet.pdf
