@@ -20,3 +20,8 @@ simple_chatbot/data/
 numpy-cheatsheet.pdf
 Housing.ipynb
 srt_combiner.py
+
+# kaggle dataset files
+test.csv
+train.csv
+sample_submission.csv
