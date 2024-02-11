@@ -20,3 +20,7 @@ simple_chatbot/data/
 numpy-cheatsheet.pdf
 Housing.ipynb
 srt_combiner.py
+
+# dataset file types
+*.csv
+*.zip
